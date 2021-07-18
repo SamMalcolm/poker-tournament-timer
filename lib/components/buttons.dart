@@ -19,7 +19,7 @@ Widget pokerButton(onPressed, text,
             onPressed: onPressed,
             child: Text(
               text,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontFamily: 'primaryLight'),
             ))),
   );
 }
