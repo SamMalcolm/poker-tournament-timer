@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'components/mainViewTemplate.dart';
 import 'components/buttons.dart';
+import 'controller/pokerGame.dart';
 
 class ChipValueManagerView extends StatefulWidget {
-  ChipValueManagerView({Key? key}) : super(key: key);
+  ChipValueManagerView({Key? key, required this.game}) : super(key: key);
+  final PokerGame game;
   @override
   _ChipValueManagerViewState createState() => _ChipValueManagerViewState();
 }

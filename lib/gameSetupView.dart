@@ -65,21 +65,22 @@ class _GameSetupViewState extends State<GameSetupView> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BlindLevelManagerView(
-                  game: game,
-                  updateGame: (PokerGame g) {
-                    setState(() {
-                      game = g;
-                      print(game);
-                    });
-                  }),
-            ));
+                builder: (context) => BlindLevelManagerView(
+                    game: game,
+                    updateGame: (PokerGame g) {
+                      setState(() {
+                        game = g;
+                        print(game);
+                      });
+                    })));
       }, "Blind Levels"),
       pokerButton(() {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ChipValueManagerView(),
+              builder: (context) => ChipValueManagerView(
+                game: game,
+              ),
             ));
       }, "Chip Values"),
       pokerButton(() {

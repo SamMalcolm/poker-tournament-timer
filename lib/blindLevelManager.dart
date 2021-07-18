@@ -10,7 +10,7 @@ class BlindLevelManagerView extends StatefulWidget {
       : super(key: key);
 
   final PokerGame game;
-  final void updateGame;
+  final Function updateGame;
 
   @override
   _BlindLevelManagerViewState createState() => _BlindLevelManagerViewState();
@@ -41,10 +41,11 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
         style: TextStyle(color: Colors.white, fontFamily: 'primaryBold'),
       ),
       TextField(
+        keyboardType: TextInputType.number,
         onChanged: (input) {
-          // int value = int.parse(input);
-          // widget.game.blindLevelTime = 60 * value;
-          // widget.updateGame(widget.game);
+          int value = int.parse(input);
+          widget.game.blindLevelTime = 60 * value;
+          widget.updateGame(widget.game);
         },
         style: TextStyle(color: Colors.white),
       ),
@@ -53,28 +54,30 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
           Column(
             children: [
               Text("Small Blind"),
-              Text("\$1"),
+              Text("1"),
             ],
           ),
           Column(
             children: [
               Text("Big Blind"),
-              Text("\$2"),
+              Text("2"),
             ],
           )
         ],
       ),
-      pokerButton("Add Level (x2)", () {
-        print("woop");
-        // setState(() {
-        //   //   Map lastBlindLevel = blindValues[blindValues.length];
-        //   //   lastBlindLevel['bb'] = lastBlindLevel['bb'] * 2;
-        //   //   lastBlindLevel['sb'] = lastBlindLevel['sb'] * 2;
-        //   //   blindValues.add(lastBlindLevel);
-        //   //   widget.game.blindLevels = blindValues;
-        //   //   widget.updateGame(widget.game);
-        // });
-      })
+      (blindValues.length >= 1)
+          ? pokerButton(() {
+              print("woop");
+              setState(() {
+                Map lastBlindLevel = blindValues[blindValues.length];
+                lastBlindLevel['bb'] = lastBlindLevel['bb'] * 2;
+                lastBlindLevel['sb'] = lastBlindLevel['sb'] * 2;
+                blindValues.add(lastBlindLevel);
+                widget.game.blindLevels = blindValues;
+                widget.updateGame(widget.game);
+              });
+            }, "Add Level (x2)")
+          : Text("No Blind Levels")
     ]);
   }
 }
