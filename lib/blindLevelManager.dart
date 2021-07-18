@@ -10,7 +10,7 @@ class BlindLevelManagerView extends StatefulWidget {
       : super(key: key);
 
   final PokerGame game;
-  final Function updateGame;
+  final void updateGame;
 
   @override
   _BlindLevelManagerViewState createState() => _BlindLevelManagerViewState();
@@ -65,14 +65,15 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
         ],
       ),
       pokerButton("Add Level (x2)", () {
-        setState(() {
-          //   Map lastBlindLevel = blindValues[blindValues.length];
-          //   lastBlindLevel['bb'] = lastBlindLevel['bb'] * 2;
-          //   lastBlindLevel['sb'] = lastBlindLevel['sb'] * 2;
-          //   blindValues.add(lastBlindLevel);
-          //   widget.game.blindLevels = blindValues;
-          //   widget.updateGame(widget.game);
-        });
+        print("woop");
+        // setState(() {
+        //   //   Map lastBlindLevel = blindValues[blindValues.length];
+        //   //   lastBlindLevel['bb'] = lastBlindLevel['bb'] * 2;
+        //   //   lastBlindLevel['sb'] = lastBlindLevel['sb'] * 2;
+        //   //   blindValues.add(lastBlindLevel);
+        //   //   widget.game.blindLevels = blindValues;
+        //   //   widget.updateGame(widget.game);
+        // });
       })
     ]);
   }

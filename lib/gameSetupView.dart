@@ -67,7 +67,7 @@ class _GameSetupViewState extends State<GameSetupView> {
             MaterialPageRoute(
               builder: (context) => BlindLevelManagerView(
                   game: game,
-                  updateGame: (g) {
+                  updateGame: (PokerGame g) {
                     setState(() {
                       game = g;
                       print(game);

@@ -6,5 +6,5 @@ class PokerGame {
   bool paused = true;
   int blindLevelTime = 600;
 
-  PokerGame() {}
+  PokerGame();
 }
