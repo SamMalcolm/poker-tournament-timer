@@ -49,22 +49,25 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
         },
         style: TextStyle(color: Colors.white),
       ),
-      Row(
-        children: [
-          Column(
-            children: [
-              Text("Small Blind"),
-              Text("1"),
-            ],
-          ),
-          Column(
-            children: [
-              Text("Big Blind"),
-              Text("2"),
-            ],
-          )
-        ],
-      ),
+      //
+      // Row(
+      //   children: [
+      //     Column(mainAxisSize: MainAxisSize.max, children: [
+      //       Text("Small Blind", style: TextStyle(color: Colors.white)),
+      //       TextField(
+      //           onChanged: (String s) {}, style: TextStyle(color: Colors.white))
+      //     ]),
+      //     Column(mainAxisSize: MainAxisSize.max, children: [
+      //       Text("Big Blind", style: TextStyle(color: Colors.white)),
+      //       TextField(
+      //           onChanged: (String s) {}, style: TextStyle(color: Colors.white))
+      //     ]),
+      //     pokerButton(() {}, "Add Level", colors: <Color>[
+      //       Color.fromRGBO(0, 120, 70, 1),
+      //       Color.fromRGBO(0, 90, 40, 1),
+      //     ])
+      //   ],
+      // ),
       (blindValues.length >= 1)
           ? pokerButton(() {
               print("woop");
