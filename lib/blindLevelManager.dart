@@ -4,6 +4,43 @@ import 'components/mainViewTemplate.dart';
 import 'components/buttons.dart';
 import 'controller/pokerGame.dart';
 
+List<Widget> blindLevelDisplay(blindValues) {
+  List<Widget> output = [];
+
+  output.add(Row(mainAxisSize: MainAxisSize.max, children: [
+    Expanded(
+      child: Text(
+        "Small Blind",
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+    Expanded(
+      child: Text(
+        "Big Blind",
+        style: TextStyle(color: Colors.white),
+      ),
+    )
+  ]));
+
+  for (int i = 0; i < blindValues.length; i++) {
+    output.add(Row(mainAxisSize: MainAxisSize.max, children: [
+      Expanded(
+        child: Text(
+          blindValues[i]['sb'].toString(),
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      Expanded(
+        child: Text(
+          blindValues[i]['bb'].toString(),
+          style: TextStyle(color: Colors.white),
+        ),
+      )
+    ]));
+  }
+  return output;
+}
+
 class BlindLevelManagerView extends StatefulWidget {
   BlindLevelManagerView(
       {Key? key, required this.game, required this.updateGame})
@@ -18,6 +55,11 @@ class BlindLevelManagerView extends StatefulWidget {
 
 class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
   List<Map> blindValues = [];
+  int sb = 0;
+  int bb = 0;
+  TextEditingController sbController = new TextEditingController();
+  TextEditingController bbController = new TextEditingController();
+
   @override
   void initState() {
     blindValues = widget.game.blindLevels;
@@ -49,30 +91,63 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
         },
         style: TextStyle(color: Colors.white),
       ),
+      SizedBox(height: 25.0),
+      ...blindLevelDisplay(blindValues),
       //
-      // Row(
-      //   children: [
-      //     Column(mainAxisSize: MainAxisSize.max, children: [
-      //       Text("Small Blind", style: TextStyle(color: Colors.white)),
-      //       TextField(
-      //           onChanged: (String s) {}, style: TextStyle(color: Colors.white))
-      //     ]),
-      //     Column(mainAxisSize: MainAxisSize.max, children: [
-      //       Text("Big Blind", style: TextStyle(color: Colors.white)),
-      //       TextField(
-      //           onChanged: (String s) {}, style: TextStyle(color: Colors.white))
-      //     ]),
-      //     pokerButton(() {}, "Add Level", colors: <Color>[
-      //       Color.fromRGBO(0, 120, 70, 1),
-      //       Color.fromRGBO(0, 90, 40, 1),
-      //     ])
-      //   ],
-      // ),
+      Row(
+        children: [
+          Expanded(
+            child: Column(children: [
+              Text("Small Blind", style: TextStyle(color: Colors.white)),
+              TextField(
+                  controller: sbController,
+                  onChanged: (String s) {
+                    print(s);
+                    if (s != '') {
+                      setState(() {
+                        sb = int.parse(s);
+                        bb = sb * 2;
+                        bbController.text = bb.toString();
+                      });
+                    }
+                  },
+                  style: TextStyle(color: Colors.white)),
+            ]),
+          ),
+          Expanded(
+            child: Column(children: [
+              Text("Big Blind", style: TextStyle(color: Colors.white)),
+              TextField(
+                  controller: bbController,
+                  onChanged: (String s) {
+                    if (s != '') {
+                      setState(() {
+                        bb = int.parse(s);
+                      });
+                    }
+                  },
+                  style: TextStyle(color: Colors.white))
+            ]),
+          ),
+          pokerButton(() {
+            setState(() {
+              Map blindLevel = {};
+              blindLevel['sb'] = sb;
+              blindLevel['bb'] = bb;
+              blindValues.add(blindLevel);
+              widget.game.blindLevels = blindValues;
+              widget.updateGame(widget.game);
+            });
+          }, "Add Level", colors: <Color>[
+            Color.fromRGBO(0, 120, 70, 1),
+            Color.fromRGBO(0, 90, 40, 1),
+          ])
+        ],
+      ),
       (blindValues.length >= 1)
           ? pokerButton(() {
-              print("woop");
               setState(() {
-                Map lastBlindLevel = blindValues[blindValues.length];
+                Map lastBlindLevel = blindValues[blindValues.length - 1];
                 lastBlindLevel['bb'] = lastBlindLevel['bb'] * 2;
                 lastBlindLevel['sb'] = lastBlindLevel['sb'] * 2;
                 blindValues.add(lastBlindLevel);
