@@ -26,13 +26,13 @@ List<Widget> blindLevelDisplay(blindValues) {
     output.add(Row(mainAxisSize: MainAxisSize.max, children: [
       Expanded(
         child: Text(
-          blindValues[i]['sb'].toString(),
+          '\$' + blindValues[i]['sb'].toString(),
           style: TextStyle(color: Colors.white),
         ),
       ),
       Expanded(
         child: Text(
-          blindValues[i]['bb'].toString(),
+          '\$' + blindValues[i]['bb'].toString(),
           style: TextStyle(color: Colors.white),
         ),
       )
