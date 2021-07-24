@@ -7,6 +7,7 @@ import 'gameView.dart';
 import 'components/mainViewTemplate.dart';
 import 'components/buttons.dart';
 import 'controller/pokerGame.dart';
+import 'components/divider.dart';
 
 class GameSetupView extends StatefulWidget {
   GameSetupView({Key? key}) : super(key: key);
@@ -58,9 +59,7 @@ class _GameSetupViewState extends State<GameSetupView> {
         },
         style: TextStyle(color: Colors.white),
       ),
-      SizedBox(
-        height: 15.0,
-      ),
+      ...pokerDivider(),
       pokerButton(() {
         Navigator.push(
             context,

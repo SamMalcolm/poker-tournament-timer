@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 Widget mainViewTemplate(children, {padding: true}) {
   return Container(
@@ -15,10 +14,12 @@ Widget mainViewTemplate(children, {padding: true}) {
           backgroundColor: Colors.transparent,
           body: Padding(
               padding: (padding)
-                  ? const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 8.0)
+                  ? const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 16.0)
                   : const EdgeInsets.all(0.0),
-              child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: children))));
+              child: SingleChildScrollView(
+                child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: children),
+              ))));
 }

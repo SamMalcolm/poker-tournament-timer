@@ -3,39 +3,48 @@ import 'package:flutter/services.dart';
 import 'components/mainViewTemplate.dart';
 import 'components/buttons.dart';
 import 'controller/pokerGame.dart';
+import 'components/typography.dart';
+import 'components/divider.dart';
 
-List<Widget> blindLevelDisplay(blindValues) {
+List<Widget> blindLevelDisplay(blindValues, setState) {
   List<Widget> output = [];
-
-  output.add(Row(mainAxisSize: MainAxisSize.max, children: [
-    Expanded(
-      child: Text(
-        "Small Blind",
-        style: TextStyle(color: Colors.white),
+  if (blindValues.length > 0) {
+    output.add(Row(mainAxisSize: MainAxisSize.max, children: [
+      Expanded(
+        child: heading3("Small Blind"),
       ),
-    ),
-    Expanded(
-      child: Text(
-        "Big Blind",
-        style: TextStyle(color: Colors.white),
+      Expanded(
+        child: heading3("Big Blind"),
       ),
-    )
-  ]));
+      Expanded(
+        child: Text(
+          "",
+          style: TextStyle(color: Colors.white),
+        ),
+      )
+    ]));
+  }
 
   for (int i = 0; i < blindValues.length; i++) {
     output.add(Row(mainAxisSize: MainAxisSize.max, children: [
       Expanded(
-        child: Text(
+        child: bodyText(
           '\$' + blindValues[i]['sb'].toString(),
-          style: TextStyle(color: Colors.white),
         ),
       ),
       Expanded(
-        child: Text(
+        child: bodyText(
           '\$' + blindValues[i]['bb'].toString(),
-          style: TextStyle(color: Colors.white),
         ),
-      )
+      ),
+      pokerButton(() {
+        setState(() {
+          blindValues.removeAt(i);
+        });
+      }, "Delete", colors: <Color>[
+        Color.fromRGBO(147, 0, 0, 1),
+        Color.fromRGBO(109, 0, 0, 1),
+      ])
     ]));
   }
   return output;
@@ -59,6 +68,7 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
   int bb = 0;
   TextEditingController sbController = new TextEditingController();
   TextEditingController bbController = new TextEditingController();
+  int blindDuration = 0;
 
   @override
   void initState() {
@@ -70,35 +80,46 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
   Widget build(BuildContext context) {
     return mainViewTemplate([
       SizedBox(
-        height: 10.0,
+        height: 25.0,
       ),
-      Text("Blind Levels",
-          style: TextStyle(
-              color: Colors.white, fontSize: 24.0, fontFamily: 'primaryBold')),
-      SizedBox(
-        height: 20.0,
-      ),
-      Text(
-        "Blind Level Duration (Mins)",
-        style: TextStyle(color: Colors.white, fontFamily: 'primaryBold'),
-      ),
+      heading1("Blind Levels"),
+      ...pokerDivider(),
+      heading2("Blind Level Duration"),
       TextField(
         keyboardType: TextInputType.number,
         onChanged: (input) {
           int value = int.parse(input);
+          blindDuration = value;
           widget.game.blindLevelTime = 60 * value;
           widget.updateGame(widget.game);
         },
         style: TextStyle(color: Colors.white),
       ),
+      SizedBox(height: 20.0),
+      CheckboxListTile(
+        checkColor: Colors.white,
+        title: bodyText(
+            "Continue doubling blind levels indefinitely when timer runs out of predefined levels? When unchecked the timer will stay on the last level forever.",
+            size: 12.0),
+        value: widget.game.blindLevelIndefinitelyDuplicateBehaviour,
+        onChanged: (bool? value) {
+          setState(() {
+            widget.game.blindLevelIndefinitelyDuplicateBehaviour = value!;
+            widget.updateGame(widget.game);
+          });
+        },
+      ),
+
       SizedBox(height: 25.0),
-      ...blindLevelDisplay(blindValues),
+      ...blindLevelDisplay(blindValues, setState),
+      ...pokerDivider(),
       //
       Row(
         children: [
           Expanded(
-            child: Column(children: [
-              Text("Small Blind", style: TextStyle(color: Colors.white)),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              heading3("Small Blind"),
               TextField(
                   controller: sbController,
                   onChanged: (String s) {
@@ -115,8 +136,9 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
             ]),
           ),
           Expanded(
-            child: Column(children: [
-              Text("Big Blind", style: TextStyle(color: Colors.white)),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              heading3("Big Blind"),
               TextField(
                   controller: bbController,
                   onChanged: (String s) {
@@ -131,31 +153,38 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
           ),
           pokerButton(() {
             setState(() {
-              Map blindLevel = {};
-              blindLevel['sb'] = sb;
-              blindLevel['bb'] = bb;
-              blindValues.add(blindLevel);
-              widget.game.blindLevels = blindValues;
-              widget.updateGame(widget.game);
+              if (sb != 0 && bb != 0) {
+                Map blindLevel = {};
+                blindLevel['sb'] = sb;
+                blindLevel['bb'] = bb;
+                sb = sb * 2;
+                bb = bb * 2;
+                sbController.text = sb.toString();
+                bbController.text = bb.toString();
+                blindValues.add(blindLevel);
+                widget.game.blindLevels = blindValues;
+                widget.updateGame(widget.game);
+              }
             });
           }, "Add Level", colors: <Color>[
             Color.fromRGBO(0, 120, 70, 1),
             Color.fromRGBO(0, 90, 40, 1),
-          ])
+          ]),
         ],
       ),
-      (blindValues.length >= 1)
-          ? pokerButton(() {
-              setState(() {
-                Map lastBlindLevel = blindValues[blindValues.length - 1];
-                lastBlindLevel['bb'] = lastBlindLevel['bb'] * 2;
-                lastBlindLevel['sb'] = lastBlindLevel['sb'] * 2;
-                blindValues.add(lastBlindLevel);
-                widget.game.blindLevels = blindValues;
-                widget.updateGame(widget.game);
-              });
-            }, "Add Level (x2)")
-          : Text("No Blind Levels")
+      ...pokerDivider(),
+      (blindValues.length > 0 && blindDuration != 0)
+          ? bodyText("Blind Levels will take " +
+              (blindValues.length * blindDuration).toString() +
+              ' Minutes to complete')
+          : Text(""),
+      pokerButton(() {
+        Navigator.pop(context);
+      }, "Done", colors: <Color>[
+        Color.fromRGBO(0, 120, 70, 1),
+        Color.fromRGBO(0, 90, 40, 1),
+      ]),
+      SizedBox(height: 20.0)
     ]);
   }
 }
