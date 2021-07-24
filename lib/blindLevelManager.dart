@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:poker_tournament_timer/components/formFields.dart';
 import 'components/mainViewTemplate.dart';
 import 'components/buttons.dart';
+import 'components/formFields.dart';
 import 'controller/pokerGame.dart';
 import 'components/typography.dart';
 import 'components/divider.dart';
@@ -79,38 +81,26 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
   @override
   Widget build(BuildContext context) {
     return mainViewTemplate([
-      SizedBox(
-        height: 25.0,
-      ),
+      pokerSpacer(),
       heading1("Blind Levels"),
       ...pokerDivider(),
-      heading2("Blind Level Duration"),
-      TextField(
-        keyboardType: TextInputType.number,
-        onChanged: (input) {
-          int value = int.parse(input);
-          blindDuration = value;
-          widget.game.blindLevelTime = 60 * value;
+      heading2("Blind Level Duration (Mins)"),
+      pokerTextField((input) {
+        int value = int.parse(input);
+        blindDuration = value;
+        widget.game.blindLevelTime = 60 * value;
+        widget.updateGame(widget.game);
+      }, expanded: false),
+      pokerSpacer(),
+      pokerCheckbox(
+          "Continue doubling blind levels indefinitely when timer runs out of predefined levels? When unchecked the timer will stay on the last level forever.",
+          (bool? value) {
+        setState(() {
+          widget.game.blindLevelIndefinitelyDuplicateBehaviour = value!;
           widget.updateGame(widget.game);
-        },
-        style: TextStyle(color: Colors.white),
-      ),
-      SizedBox(height: 20.0),
-      CheckboxListTile(
-        checkColor: Colors.white,
-        title: bodyText(
-            "Continue doubling blind levels indefinitely when timer runs out of predefined levels? When unchecked the timer will stay on the last level forever.",
-            size: 12.0),
-        value: widget.game.blindLevelIndefinitelyDuplicateBehaviour,
-        onChanged: (bool? value) {
-          setState(() {
-            widget.game.blindLevelIndefinitelyDuplicateBehaviour = value!;
-            widget.updateGame(widget.game);
-          });
-        },
-      ),
-
-      SizedBox(height: 25.0),
+        });
+      }, widget.game.blindLevelIndefinitelyDuplicateBehaviour),
+      pokerSpacer(),
       ...blindLevelDisplay(blindValues, setState),
       ...pokerDivider(),
       //
@@ -120,35 +110,29 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               heading3("Small Blind"),
-              TextField(
-                  controller: sbController,
-                  onChanged: (String s) {
-                    print(s);
-                    if (s != '') {
-                      setState(() {
-                        sb = int.parse(s);
-                        bb = sb * 2;
-                        bbController.text = bb.toString();
-                      });
-                    }
-                  },
-                  style: TextStyle(color: Colors.white)),
+              pokerTextField((String s) {
+                if (s != '') {
+                  setState(() {
+                    sb = int.parse(s);
+                    bb = sb * 2;
+                    bbController.text = bb.toString();
+                  });
+                }
+              }, controller: sbController, expanded: false)
             ]),
           ),
+          SizedBox(width: 5.0),
           Expanded(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               heading3("Big Blind"),
-              TextField(
-                  controller: bbController,
-                  onChanged: (String s) {
-                    if (s != '') {
-                      setState(() {
-                        bb = int.parse(s);
-                      });
-                    }
-                  },
-                  style: TextStyle(color: Colors.white))
+              pokerTextField((String s) {
+                if (s != '') {
+                  setState(() {
+                    bb = int.parse(s);
+                  });
+                }
+              }, controller: bbController, expanded: false)
             ]),
           ),
           pokerButton(() {
@@ -162,14 +146,12 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
                 sbController.text = sb.toString();
                 bbController.text = bb.toString();
                 blindValues.add(blindLevel);
+                blindValues.sort((a, b) => (a['sb'].compareTo(b['sb'])));
                 widget.game.blindLevels = blindValues;
                 widget.updateGame(widget.game);
               }
             });
-          }, "Add Level", colors: <Color>[
-            Color.fromRGBO(0, 120, 70, 1),
-            Color.fromRGBO(0, 90, 40, 1),
-          ]),
+          }, "Add Level"),
         ],
       ),
       ...pokerDivider(),

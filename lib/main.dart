@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Poker Timer',
       themeMode: ThemeMode.light,
       theme: ThemeData(
+        unselectedWidgetColor: Colors.white,
         primaryTextTheme: TextTheme(
             button:
                 TextStyle(color: Colors.white, backgroundColor: Colors.white)),

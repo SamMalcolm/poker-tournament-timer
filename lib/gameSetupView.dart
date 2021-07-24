@@ -8,6 +8,8 @@ import 'components/mainViewTemplate.dart';
 import 'components/buttons.dart';
 import 'controller/pokerGame.dart';
 import 'components/divider.dart';
+import 'components/typography.dart';
+import 'components/formFields.dart';
 
 class GameSetupView extends StatefulWidget {
   GameSetupView({Key? key}) : super(key: key);
@@ -26,39 +28,22 @@ class _GameSetupViewState extends State<GameSetupView> {
   @override
   Widget build(BuildContext context) {
     return mainViewTemplate([
-      SizedBox(
-        height: 10.0,
-      ),
-      Text("Game Setup",
-          style: TextStyle(
-              color: Colors.white, fontSize: 24.0, fontFamily: 'primaryBold')),
-      SizedBox(
-        height: 20.0,
-      ),
-      Text(
-        "Game Name",
-        style: TextStyle(color: Colors.white, fontFamily: 'primaryBold'),
-      ),
-      TextField(
-        onChanged: (String string) {
-          print(string);
-        },
-        style: TextStyle(color: Colors.white),
-      ),
-      SizedBox(
-        height: 15.0,
-      ),
-      Text(
-        "Players",
-        style: TextStyle(color: Colors.white),
-      ),
-      TextField(
-        keyboardType: TextInputType.number,
-        onChanged: (String string) {
-          print(string);
-        },
-        style: TextStyle(color: Colors.white),
-      ),
+      pokerSpacer(),
+      heading1("Game Setup"),
+      pokerSpacer(),
+      heading2("Game Name"),
+      pokerTextField((String string) {
+        setState(() {
+          game.gameName = string;
+        });
+      }, expanded: false),
+      pokerSpacer(),
+      heading2("Players"),
+      pokerTextField((String string) {
+        setState(() {
+          game.playerCount = int.parse(string);
+        });
+      }, expanded: false, numbersOnly: true),
       ...pokerDivider(),
       pokerButton(() {
         Navigator.push(
