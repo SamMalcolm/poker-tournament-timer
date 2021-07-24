@@ -7,3 +7,7 @@ List<Widget> pokerDivider() {
     SizedBox(height: 15.0),
   ];
 }
+
+Widget pokerSpacer() {
+  return SizedBox(height: 20.0);
+}

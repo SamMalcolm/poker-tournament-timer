@@ -69,7 +69,6 @@ class _GameSetupViewState extends State<GameSetupView> {
                     updateGame: (PokerGame g) {
                       setState(() {
                         game = g;
-                        print(game);
                       });
                     })));
       }, "Blind Levels"),
@@ -79,6 +78,11 @@ class _GameSetupViewState extends State<GameSetupView> {
             MaterialPageRoute(
               builder: (context) => ChipValueManagerView(
                 game: game,
+                updateGame: (PokerGame g) {
+                  setState(() {
+                    game = g;
+                  });
+                },
               ),
             ));
       }, "Chip Values"),
