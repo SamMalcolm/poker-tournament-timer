@@ -15,9 +15,6 @@ Future<List<dynamic>> readDir() async {
     var files = Directory(appDocDir.path).listSync();
     print(files);
     return files;
-    // final file = File('${appDocDir.path}/My Ga.txt');
-    // String text = await file.readAsString();
-    // print(text);
   } catch (e) {
     print("Couldn't read file");
     return [];
@@ -27,15 +24,10 @@ Future<List<dynamic>> readDir() async {
 readFile(fileName) async {
   String output = "";
   try {
-    print("\n\n READ FILE \n\n");
-    print(fileName);
-    print("\n\n FILE \n\n");
     Directory appDocDir = await getApplicationDocumentsDirectory();
+    print('${appDocDir.path}/$fileName');
     final file = File('${appDocDir.path}/$fileName');
-    print(file);
-    print("\n\n TEXT \n\n");
     String text = await file.readAsString();
-    print(text);
     return text;
   } catch (e) {
     print(e);

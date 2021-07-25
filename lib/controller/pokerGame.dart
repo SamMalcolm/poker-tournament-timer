@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'fileController.dart';
+import 'package:intl/intl.dart';
 
 class PokerGame {
   List<Map> blindLevels = [];
@@ -15,7 +16,7 @@ class PokerGame {
   bool paused = true;
   int blindLevelTime = 600;
   DateTime dateCreated = DateTime.now();
-  DateTime? dateUpdated;
+  DateTime dateUpdated = DateTime.now();
 
   Map<String, dynamic> toJsonPrep() => {
         'gameName': gameName,
@@ -23,7 +24,9 @@ class PokerGame {
             blindLevelIndefinitelyDuplicateBehaviour,
         'blindLevelTime': blindLevelTime,
         'chips': chips,
-        'blindLevels': blindLevels
+        'blindLevels': blindLevels,
+        'dateCreated': DateFormat('MMddyyyyHHmmss').format(dateCreated),
+        'dateUpdated': DateFormat('MMddyyyyHHmmss').format(dateUpdated)
       };
 
   String gameToString() {

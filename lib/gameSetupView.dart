@@ -80,11 +80,8 @@ class _GameSetupViewState extends State<GameSetupView> {
             ));
       }, "Chip Values"),
       pokerButton(() {
-        save(
-            game.gameName,
-            game.gameToString(),
-            //DateFormat('yyyy-MM-dd-kk:mm').format(
-            game.dateCreated.toString());
+        save(game.gameName, game.gameToString(),
+            DateFormat('yyyyddMMHHmmss').format(game.dateCreated));
       }, "Save Game Settings"),
       pokerButton(() async {
         var files = await readDir();
