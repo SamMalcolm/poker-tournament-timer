@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 void save(fileName, gameString, date) async {
   print(gameString);
   Directory appDocDir = await getApplicationDocumentsDirectory();
+
   final file = File('${appDocDir.path}/$fileName--$date.txt');
   await file.writeAsString(gameString);
   print('saved');
