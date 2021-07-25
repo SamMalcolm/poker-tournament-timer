@@ -44,7 +44,7 @@ class _GameSetupViewState extends State<GameSetupView> {
         setState(() {
           game.gameName = string;
         });
-      }, expanded: false, controller: gameNameController),
+      }, expanded: false, controller: gameNameController, noSpecialChars: true),
       pokerSpacer(),
       heading2("Players"),
       pokerTextField((String string) {

@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './typography.dart';
 
-Widget pokerTextFieldChild(onChanged, {numbersOnly: false, controller: false}) {
+Widget pokerTextFieldChild(onChanged,
+    {numbersOnly: false, controller: false, noSpecialChars: false}) {
   return TextField(
+    inputFormatters: (noSpecialChars)
+        ? [
+            FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z ]")),
+          ]
+        : [],
     keyboardType: (numbersOnly) ? TextInputType.number : TextInputType.text,
     controller: (controller != false) ? controller : null,
     decoration: InputDecoration(
@@ -22,13 +29,20 @@ Widget pokerTextFieldChild(onChanged, {numbersOnly: false, controller: false}) {
 }
 
 Widget pokerTextField(onChanged,
-    {numbersOnly: false, controller: false, expanded: true}) {
+    {numbersOnly: false,
+    controller: false,
+    expanded: true,
+    noSpecialChars: false}) {
   return (expanded)
       ? Expanded(
           child: pokerTextFieldChild(onChanged,
-              numbersOnly: numbersOnly, controller: controller))
+              numbersOnly: numbersOnly,
+              controller: controller,
+              noSpecialChars: noSpecialChars))
       : pokerTextFieldChild(onChanged,
-          numbersOnly: numbersOnly, controller: controller);
+          numbersOnly: numbersOnly,
+          controller: controller,
+          noSpecialChars: noSpecialChars);
 }
 
 Widget dropDownField(value, options, changed) {
