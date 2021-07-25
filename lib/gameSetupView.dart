@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import 'package:poker_tournament_timer/chipValueManager.dart';
+import 'savedConfigView.dart';
 import 'blindLevelManager.dart';
 import 'chipValueManager.dart';
 import 'gameView.dart';
 import 'components/mainViewTemplate.dart';
 import 'components/buttons.dart';
 import 'controller/pokerGame.dart';
+import 'controller/fileController.dart';
 import 'components/divider.dart';
 import 'components/typography.dart';
 import 'components/formFields.dart';
+import 'package:intl/intl.dart';
 
 class GameSetupView extends StatefulWidget {
   GameSetupView({Key? key}) : super(key: key);
@@ -19,9 +24,12 @@ class GameSetupView extends StatefulWidget {
 
 class _GameSetupViewState extends State<GameSetupView> {
   PokerGame game = PokerGame();
+  var gameNameController = TextEditingController();
 
   @override
   void initState() {
+    game.gameName = "My Game";
+    gameNameController.text = game.gameName;
     super.initState();
   }
 
@@ -36,7 +44,7 @@ class _GameSetupViewState extends State<GameSetupView> {
         setState(() {
           game.gameName = string;
         });
-      }, expanded: false),
+      }, expanded: false, controller: gameNameController),
       pokerSpacer(),
       heading2("Players"),
       pokerTextField((String string) {
@@ -71,6 +79,28 @@ class _GameSetupViewState extends State<GameSetupView> {
               ),
             ));
       }, "Chip Values"),
+      pokerButton(() {
+        save(
+            game.gameName,
+            game.gameToString(),
+            //DateFormat('yyyy-MM-dd-kk:mm').format(
+            game.dateCreated.toString());
+      }, "Save Game Settings"),
+      pokerButton(() async {
+        var files = await readDir();
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SavedConfigView(
+                configFiles: files,
+                updateGameFromFile: (filepath) {
+                  setState(() {
+                    game.updateGameFromFile(filepath);
+                  });
+                },
+              ),
+            ));
+      }, "Load Game Settings"),
       pokerButton(() {
         Navigator.push(
             context,

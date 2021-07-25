@@ -140,6 +140,7 @@ class _ChipValueManagerViewState extends State<ChipValueManagerView> {
       }, "Add"),
       ...pokerDivider(),
       pokerButton(() {
+        FocusScope.of(context).unfocus();
         Navigator.pop(context);
       }, "Done", colors: <Color>[
         Color.fromRGBO(0, 120, 70, 1),

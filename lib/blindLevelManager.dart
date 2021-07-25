@@ -118,7 +118,7 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
                     bbController.text = bb.toString();
                   });
                 }
-              }, controller: sbController, expanded: false)
+              }, controller: sbController, expanded: false, numbersOnly: true)
             ]),
           ),
           SizedBox(width: 5.0),
@@ -132,7 +132,7 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
                     bb = int.parse(s);
                   });
                 }
-              }, controller: bbController, expanded: false)
+              }, controller: bbController, expanded: false, numbersOnly: true)
             ]),
           ),
           pokerButton(() {
@@ -161,6 +161,7 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
               ' Minutes to complete')
           : Text(""),
       pokerButton(() {
+        FocusScope.of(context).unfocus();
         Navigator.pop(context);
       }, "Done", colors: <Color>[
         Color.fromRGBO(0, 120, 70, 1),
