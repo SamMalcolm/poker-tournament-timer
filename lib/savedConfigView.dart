@@ -35,10 +35,13 @@ List<Widget> displayConfig(configFiles, updateGame, context) {
   for (int i = 0; i < configFiles.length; i++) {
     if (new RegExp('\.DS_Store').hasMatch(configFiles[i].toString()) == false) {
       String filePath = configFiles[i].toString();
-      List brokenFilePath = filePath.split('/');
+      print(filePath);
+      List brokenFilePath = filePath.split("/");
       List brokenFileName =
-          brokenFilePath[brokenFilePath.length - 1].split('--');
+          brokenFilePath[brokenFilePath.length - 1].split("--");
+      print(brokenFileName);
       String fileName = decodeWhiteSpace(brokenFileName[0]);
+      print(fileName);
 
       List brokenDate = brokenFileName[1].split('.');
       String dateWithT =

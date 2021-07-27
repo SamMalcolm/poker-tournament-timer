@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'fileController.dart';
 import 'package:intl/intl.dart';
 
 class PokerGame {
@@ -33,21 +32,28 @@ class PokerGame {
     return jsonEncode(toJsonPrep());
   }
 
-  void updateGameFromFile(filePath) async {
-    String fileContents = await readFile(filePath);
-    print(fileContents);
-    // List<dynamic> list = json.decode(fileContents);
-    // print(list);
-
-    // dateUpdated = DateTime.now();
-    // dateCreated = DateTime.parse(data['dateCreated']);
-    // gameName = data['gameName'];
-    // blindLevelTime = int.parse(data['blindLevelTime']);
-    // blindLevels = data['blindLevels'];
-    // chips = data['chips'];
-    // blindLevelIndefinitelyDuplicateBehaviour =
-    //     (data['blindLevelIndefinitelyDuplicateBehaviour'] == "true");
+  PokerGame updateFromJson(obj) {
+    print(this.gameName);
+    this.gameName = obj['gameName'];
+    print(this.gameName);
+    return this;
   }
+
+  // Future<PokerGame> updateGameFromFile(filePath) async {
+
+  //   print(list);
+
+  //   print(gameName);
+  //   dateUpdated = DateTime.now();
+  //   // dateCreated = DateTime.parse(data['dateCreated']);
+  //   // gameName = data['gameName'];
+  //   // blindLevelTime = int.parse(data['blindLevelTime']);
+  //   // blindLevels = list['blindLevels'];
+  //   // chips = list['chips'];
+  //   return this;
+  //   // blindLevelIndefinitelyDuplicateBehaviour =
+  //   //     (data['blindLevelIndefinitelyDuplicateBehaviour'] == "true");
+  // }
 
   PokerGame();
 }

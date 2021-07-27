@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
+import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:poker_tournament_timer/chipValueManager.dart';
 import 'savedConfigView.dart';
 import 'blindLevelManager.dart';
@@ -14,7 +13,6 @@ import 'controller/fileController.dart';
 import 'components/divider.dart';
 import 'components/typography.dart';
 import 'components/formFields.dart';
-import 'package:intl/intl.dart';
 
 class GameSetupView extends StatefulWidget {
   GameSetupView({Key? key}) : super(key: key);
@@ -90,9 +88,12 @@ class _GameSetupViewState extends State<GameSetupView> {
             MaterialPageRoute(
               builder: (context) => SavedConfigView(
                 configFiles: files,
-                updateGameFromFile: (filepath) {
+                updateGameFromFile: (filepath) async {
+                  String fileContents = await readFile(filepath);
+                  var obj = json.decode(fileContents);
                   setState(() {
-                    game.updateGameFromFile(filepath);
+                    game = game.updateFromJson(obj);
+                    gameNameController.text = game.gameName;
                   });
                 },
               ),
