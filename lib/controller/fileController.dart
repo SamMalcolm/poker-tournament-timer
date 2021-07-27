@@ -1,11 +1,27 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+String encodeWhiteSpace(str) {
+  final newString = str.replaceAllMapped(RegExp('[\\s]+'), (match) {
+    return '%20';
+  });
+  return newString;
+}
+
+String decodeWhiteSpace(str) {
+  final newString = str.replaceAllMapped(RegExp('%20'), (match) {
+    return ' ';
+  });
+  return newString;
+}
+
 void save(fileName, gameString, date) async {
   print(gameString);
   Directory appDocDir = await getApplicationDocumentsDirectory();
 
-  final file = File('${appDocDir.path}/$fileName--$date.txt');
+  final file =
+      File('${appDocDir.path}/${encodeWhiteSpace(fileName)}--$date.txt');
+  print('${appDocDir.path}/${encodeWhiteSpace(fileName)}--$date.txt');
   await file.writeAsString(gameString);
   print('saved');
 }
@@ -17,17 +33,16 @@ Future<List<dynamic>> readDir() async {
     print(files);
     return files;
   } catch (e) {
-    print("Couldn't read file");
+    print("Couldn't read directory");
     return [];
   }
 }
 
-readFile(fileName) async {
+Future<String> readFile(fileName) async {
   String output = "";
   try {
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    print('${appDocDir.path}/$fileName');
-    final file = File('${appDocDir.path}/$fileName');
+    final file = File(appDocDir.path + "/" + fileName);
     String text = await file.readAsString();
     return text;
   } catch (e) {

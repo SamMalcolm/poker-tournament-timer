@@ -5,6 +5,7 @@ import 'components/mainViewTemplate.dart';
 import 'components/buttons.dart';
 import 'components/divider.dart';
 import 'package:intl/intl.dart';
+import 'controller/fileController.dart';
 
 class SavedConfigView extends StatefulWidget {
   SavedConfigView(
@@ -37,16 +38,12 @@ List<Widget> displayConfig(configFiles, updateGame, context) {
       List brokenFilePath = filePath.split('/');
       List brokenFileName =
           brokenFilePath[brokenFilePath.length - 1].split('--');
-      String fileName = brokenFileName[0];
+      String fileName = decodeWhiteSpace(brokenFileName[0]);
 
       List brokenDate = brokenFileName[1].split('.');
-      print(brokenDate);
-      print(brokenDate[0]);
       String dateWithT =
           brokenDate[0].substring(0, 8) + 'T' + brokenDate[0].substring(8);
       DateTime date = DateTime.parse(dateWithT);
-      print(date);
-
       output.add(fileCard(fileName, date, () {
         Navigator.pop(context);
         updateGame(brokenFilePath[brokenFilePath.length - 1]);
