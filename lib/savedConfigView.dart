@@ -92,6 +92,7 @@ class _SavedConfigViewState extends State<SavedConfigView> {
       ...displayConfig(
           widget.configFiles, widget.updateGameFromFile, context, widget),
       pokerButton(() {
+        widget.updateMessage("", "success");
         FocusScope.of(context).unfocus();
         Navigator.pop(context);
       }, "Done")
