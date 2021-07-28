@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:poker_tournament_timer/components/formFields.dart';
 import 'components/mainViewTemplate.dart';
 import 'components/buttons.dart';
@@ -41,16 +40,21 @@ List<Widget> displayChips(chipValues, setState) {
 }
 
 class ChipValueManagerView extends StatefulWidget {
-  ChipValueManagerView({Key? key, required this.game, required this.updateGame})
+  ChipValueManagerView(
+      {Key? key,
+      required this.game,
+      required this.updateGame,
+      required this.updateMessage})
       : super(key: key);
   final PokerGame game;
   final Function updateGame;
+  final Function updateMessage;
   @override
   _ChipValueManagerViewState createState() => _ChipValueManagerViewState();
 }
 
 class _ChipValueManagerViewState extends State<ChipValueManagerView> {
-  List<Map> chipValues = [];
+  List<dynamic> chipValues = [];
   String chipColour = "White";
   int chipValue = 0;
   int startingStack = 0;
@@ -140,6 +144,7 @@ class _ChipValueManagerViewState extends State<ChipValueManagerView> {
       }, "Add"),
       ...pokerDivider(),
       pokerButton(() {
+        widget.updateMessage("Updated Chip Values", "success");
         FocusScope.of(context).unfocus();
         Navigator.pop(context);
       }, "Done", colors: <Color>[

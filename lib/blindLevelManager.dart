@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:poker_tournament_timer/components/formFields.dart';
 import 'components/mainViewTemplate.dart';
 import 'components/buttons.dart';
@@ -54,27 +53,33 @@ List<Widget> blindLevelDisplay(blindValues, setState) {
 
 class BlindLevelManagerView extends StatefulWidget {
   BlindLevelManagerView(
-      {Key? key, required this.game, required this.updateGame})
+      {Key? key,
+      required this.game,
+      required this.updateGame,
+      required this.updateMessage})
       : super(key: key);
 
   final PokerGame game;
   final Function updateGame;
+  final Function updateMessage;
 
   @override
   _BlindLevelManagerViewState createState() => _BlindLevelManagerViewState();
 }
 
 class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
-  List<Map> blindValues = [];
+  List<dynamic> blindValues = [];
   int sb = 0;
   int bb = 0;
   TextEditingController sbController = new TextEditingController();
   TextEditingController bbController = new TextEditingController();
   int blindDuration = 0;
-
+  var blindLevelTimeController = TextEditingController();
   @override
   void initState() {
     blindValues = widget.game.blindLevels;
+    blindLevelTimeController.text =
+        (widget.game.blindLevelTime / 60).toString();
     super.initState();
   }
 
@@ -90,10 +95,10 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
         blindDuration = value;
         widget.game.blindLevelTime = 60 * value;
         widget.updateGame(widget.game);
-      }, expanded: false),
+      }, expanded: false, controller: blindLevelTimeController),
       pokerSpacer(),
       pokerCheckbox(
-          "Continue doubling blind levels indefinitely when timer runs out of predefined levels? When unchecked the timer will stay on the last level forever.",
+          "Continue doubling blind levels indefinitely when timer runs out of predefined levels.\nWhen unchecked the timer will stay on the last level forever.",
           (bool? value) {
         setState(() {
           widget.game.blindLevelIndefinitelyDuplicateBehaviour = value!;
@@ -161,6 +166,7 @@ class _BlindLevelManagerViewState extends State<BlindLevelManagerView> {
               ' Minutes to complete')
           : Text(""),
       pokerButton(() {
+        widget.updateMessage("Updated Blind Levels", "success");
         FocusScope.of(context).unfocus();
         Navigator.pop(context);
       }, "Done", colors: <Color>[

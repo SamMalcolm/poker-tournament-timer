@@ -1,35 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:poker_tournament_timer/components/typography.dart';
 import 'components/mainViewTemplate.dart';
 import 'components/buttons.dart';
 import 'components/divider.dart';
-import 'package:intl/intl.dart';
 import 'controller/fileController.dart';
 
 class SavedConfigView extends StatefulWidget {
   SavedConfigView(
-      {Key? key, required this.configFiles, required this.updateGameFromFile})
+      {Key? key,
+      required this.configFiles,
+      required this.updateGameFromFile,
+      required this.updateMessage})
       : super(key: key);
   final configFiles;
   final updateGameFromFile;
+  final Function updateMessage;
   @override
   _SavedConfigViewState createState() => _SavedConfigViewState();
 }
 
-Widget fileCard(fileName, date, ontap) {
-  return Card(
-    color: Color.fromRGBO(0, 0, 0, 0.1),
-    child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListTile(
+Widget fileCard(fileName, date, ontap, deleteFunc) {
+  return Row(children: [
+    Expanded(
+      child: Card(
+        color: Color.fromRGBO(0, 0, 0, 0.1),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
             onTap: ontap,
             title: heading3(fileName),
-            subtitle: bodyText(date.toString()))),
-  );
+            subtitle: bodyText(date.toString()),
+          ),
+        ),
+      ),
+    ),
+    Column(
+      children: [
+        pokerButton(ontap, "Load", colors: <Color>[
+          Color.fromRGBO(0, 120, 70, 1),
+          Color.fromRGBO(0, 90, 40, 1),
+        ]),
+        pokerButton(deleteFunc, "Delete", colors: <Color>[
+          Color.fromRGBO(147, 0, 0, 1),
+          Color.fromRGBO(109, 0, 0, 1),
+        ]),
+      ],
+    )
+  ]);
 }
 
-List<Widget> displayConfig(configFiles, updateGame, context) {
+List<Widget> displayConfig(configFiles, updateGame, context, widget) {
   List<Widget> output = [];
 
   for (int i = 0; i < configFiles.length; i++) {
@@ -48,8 +68,13 @@ List<Widget> displayConfig(configFiles, updateGame, context) {
           brokenDate[0].substring(0, 8) + 'T' + brokenDate[0].substring(8);
       DateTime date = DateTime.parse(dateWithT);
       output.add(fileCard(fileName, date, () {
+        widget.updateMessage("Loaded Game Configuration", "success");
         Navigator.pop(context);
         updateGame(brokenFilePath[brokenFilePath.length - 1]);
+      }, () {
+        widget.updateMessage("Deleted Game Configuration", "success");
+        Navigator.pop(context);
+        deleteFile(brokenFilePath[brokenFilePath.length - 1]);
       }));
     }
   }
@@ -64,7 +89,12 @@ class _SavedConfigViewState extends State<SavedConfigView> {
       pokerSpacer(),
       heading1("Load Config"),
       ...pokerDivider(),
-      ...displayConfig(widget.configFiles, widget.updateGameFromFile, context)
+      ...displayConfig(
+          widget.configFiles, widget.updateGameFromFile, context, widget),
+      pokerButton(() {
+        FocusScope.of(context).unfocus();
+        Navigator.pop(context);
+      }, "Done")
     ]);
   }
 }

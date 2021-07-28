@@ -65,3 +65,15 @@ Future<String> readFile(f) async {
     return "Couldn't read file";
   }
 }
+
+void deleteFile(f) async {
+  try {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    f = f.substring(0, (f.length - 1));
+    final file = File(appDocDir.path + '/' + f);
+    file.deleteSync();
+  } catch (e) {
+    print(e);
+    print("couldnt delete file");
+  }
+}
